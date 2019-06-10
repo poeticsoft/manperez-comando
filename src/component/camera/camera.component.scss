@@ -1,0 +1,24 @@
+
+.Camera {
+
+  height: 100%;
+
+  video {
+
+    display: block;
+    height: 50%;
+  }
+
+  .Photos {
+
+    height: 50%;
+    white-space: nowrap;
+    overflow: auto;
+
+    img {
+
+      height: 100%;
+      display: inline-block;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+
+.App {
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  .Camera {
+
+    width: 50%;
+  }
+
+  .Splash {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: auto;
+    background-image: url(/assets/icons/apple-icon-76x76.png)
+  }
+
+  &.CameraReady {
+
+    .Splash {
+
+      display: none;
+    }
+  }
+}
+

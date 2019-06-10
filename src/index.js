@@ -1,12 +1,37 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import './index.scss';
+import App from './component/app/app.component';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+if('serviceWorker' in navigator) {
+  
+  navigator
+  .serviceWorker
+  .register('/sw.js')
+  .then(function(registration) { 
+    
+    registration.addEventListener('updatefound', function() {
+      
+      var installingWorker = registration.installing;
+
+      console.log(
+        'A new service worker is being installed:',
+        installingWorker
+      );
+    });
+    
+    console.log('--------------------------------------------');
+    console.log('¡¡¡ WELCOME TO COMANDO MANLIVE APP !!!');
+    console.log('--------------------------------------------');
+  })
+  .catch(function(err){
+    
+    console.log('--------------------------------------------------');
+    console.log('       OPSSS... SOMETHING GOES WRONG : ((         ');
+    console.log('PLEASE VISIT WEB https://comand.manuelperez.live  ');
+    console.log('--------------------------------------------------');
+  });
+}
