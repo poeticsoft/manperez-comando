@@ -1,24 +1,113 @@
 
 .Camera {
 
-  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 
-  video {
+  .VideoWrapper {
 
-    display: block;
-    height: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    &:before,
+    video,
+    &:after {
+
+      display: inline-block;
+      vertical-align: middle;      
+    }   
+
+    &:before,
+    &:after {
+
+      content: " ";
+      width: 0;
+      height: 100%;
+    }
+
+    video {
+
+      display: inline-block;
+      width: 100%;
+    }
   }
 
   .Photos {
 
-    height: 50%;
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    height: 20%;
     white-space: nowrap;
-    overflow: auto;
 
-    img {
+    .react-swipeable-view-container {
 
       height: 100%;
-      display: inline-block;
+      width: 300px;
+
+      div {
+
+        height: 100%;
+        overflow: hidden;
+
+        img {
+
+          display: block;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .Tools {
+
+    position: absolute;
+    right: 10px;
+    box-sizing: border-box;
+    width: 120px;
+
+    button {
+
+      display: block;
+      width: 100%;
+    }
+
+    button + button {
+
+      margin: 5px 0 0 0;
+    }
+
+    &.Mode {
+
+      top: 10px;
+
+      .ToggleRafaga {
+
+        &.InRafaga {
+
+          background-color: #0c0; 
+        }
+      }
+    }
+
+    &.Action {
+
+      bottom: 10px;
+
+      .TakePhoto {
+
+        &.InRafaga {
+
+          background-color: #c00; 
+        }
+      }
     }
   }
 }

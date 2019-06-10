@@ -1,39 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
+import MessageContext from '../../context/message.context';
+import Camera from '../camera/camera.component';
+import Message from '../message/message.component';
+
 import './app.component.scss';
 
-import Camera from '../camera/camera.component';
+function App() {
 
-class App extends React.Component {
+  const [ cameraReady, setCameraReady ] = useState(false);
 
-  constructor(props, context) {
-    
-    super(props, context);
-
-    this.state = {
-      cameraReady: false
-    } 
-    
-    this.setCameraReady = this.setCameraReady.bind(this);
-  }
-
-  setCameraReady() {
-
-    this.setState({
-      cameraReady: true
-    });
-  }
-
-  render() {
-    
-    return (
+  return (
       <div className={
-        `App ${this.state.cameraReady ? 'CameraReady' : ''} `
+        `App ${ cameraReady ? 'CameraReady' : ''}`
       }>
-        <Camera setcameraready={ this.setCameraReady } />
+        <div className="CameraWrapper">
+          <Camera setcameraready={ setCameraReady } />
+        </div>
         <div className="Splash"></div>
+        <Message />
       </div>
-    );
-  }
+  );
 }
 
 export default App;

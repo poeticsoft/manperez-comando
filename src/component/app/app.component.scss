@@ -7,11 +7,7 @@
   bottom: 0;
   left: 0;
 
-  .Camera {
-
-    width: 50%;
-  }
-
+  .CameraWrapper,
   .Splash {
 
     position: absolute;
@@ -19,11 +15,21 @@
     right: 0;
     bottom: 0;
     left: 0;
+  }
+
+  .Splash {
 
     background-repeat: no-repeat;
     background-position: center; 
     background-size: auto;
     background-image: url(/assets/icons/apple-icon-76x76.png)
+  }
+
+  .Message {
+
+    position: absolute; 
+    bottom: 0;
+    left: 0;
   }
 
   &.CameraReady {

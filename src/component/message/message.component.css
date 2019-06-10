@@ -1,0 +1,9 @@
+.Message {
+
+  padding: 10px;
+  color: #fff;
+}
+
+.Message.info { background-color: #0c0; }
+.Message.error { background-color: #c00; }
+.Message.warn { background-color: rgb(241, 157, 0); }

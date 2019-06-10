@@ -1,37 +1,33 @@
 
-import React from 'react';
+import React, { 
+  useContext, 
+  useState, 
+  useEffect, 
+  useRef
+} from 'react';
 import CameraPhoto, { FACING_MODES } from 'jslib-html5-camera-photo';
+import MessageContext from '../../context/message.context';
+import SwipeableViews from 'react-swipeable-views';
+
+import Image from './image/image.component';
 import './camera.component.scss';
 
-class Camera extends React.Component {
+function Camera(props) {
 
-  constructor (props, context) {
+  const videoRef = useRef(null);
+  const [inRafaga, setInRafaga] = useState(false); 
+  const [photos, setFotos] = useState([]); 
+  const context = useContext(MessageContext);
+  let cameraPhoto = null;
 
-    super(props, context);
+  console.log(context)
 
-    this.cameraPhoto = null;
-    this.videoRef = React.createRef();
-    this.state = {
-      photos: []
-    }
+  function toggleInRafaga() {
+
+    setInRafaga(!inRafaga);
   }
 
-  componentDidMount () {
-
-    this.cameraPhoto = new CameraPhoto(this.videoRef.current);
-    this.cameraPhoto
-    .startCameraMaxResolution(FACING_MODES.ENVIRONMENT)
-    .then(() => {
-
-      this.props.setcameraready();
-    })
-    .catch((error) => {
-
-      console.error('Camera not started!', error);
-    });
-  }
-
-  takePhoto () {
+  function startTake() {
 
     const config = {
       sizeFactor: 1
@@ -43,7 +39,11 @@ class Camera extends React.Component {
     });
   }
 
-  stopCamera () {
+  function stopTake() {
+    
+  }
+
+  function stopCamera() {
 
     this.cameraPhoto
     .stopCamera()
@@ -56,65 +56,83 @@ class Camera extends React.Component {
       console.log('No camera to stop!:', error);
     });
   }
+    
+  function toggleCamera() {
 
-  render () {
 
-    return (
-      <div className="Camera">
+  } 
 
-        <button onClick={ () => {
-          this.takePhoto();
-        }}> Take photo </button>
+  useEffect(() => {  
 
-        <video
-          ref={this.videoRef}
-          autoPlay={ true }
+    cameraPhoto = new CameraPhoto(videoRef.current);
+    cameraPhoto
+    .startCameraMaxResolution(FACING_MODES.ENVIRONMENT)
+    .then(() => {
+      
+      props.setcameraready();
+      
+
+      context.updateMessage({
+        type: 'info',
+        message: 'Camera started!'
+      })
+    })
+    .catch((error) => {
+
+      context.updateMessage({
+        type: 'error',
+        message: 'Camera not started!'
+      });
+    });
+  });
+
+  return (
+    <div className="Camera">
+      
+      <div className="VideoWrapper">
+        <video ref={ videoRef }
+               autoPlay={ true }
         />
+      </div>        
 
-        <div className="Photos">
-          { 
-            this.state
-            .photos
-            .map(
-              (uri, index) => <img alt="imgcamera" 
-                                   src={ uri } 
-                                   key={ index } 
-                              />
-            )
-          }
-        </div>
+      <SwipeableViews className="Photos"
+                      enableMouseEvents={ true }>
+        { 
+          photos
+          .map(
+            (uri, index) => <Image uri={ uri } 
+                                    key={ index } 
+                            />
+          )
+        }
+      </SwipeableViews>
+
+      <div className="Tools Mode">
+
+        <button className="ToggleCamera"
+                onClick ={ toggleCamera }> 
+          ToggleCamera
+        </button>
+
+        <button className={ `ToggleRafaga ${ inRafaga ? 'InRafaga' : '' }` }
+                onClick ={ toggleInRafaga }> 
+          ToggleRafaga 
+        </button>
+
       </div>
-    );
-  }
+
+      <div className="Tools Action">
+
+        <button className={ `TakePhoto ${ inRafaga ? 'InRafaga' : '' }` }
+                onMouseDown ={ startTake }
+                onMouseUp ={ stopTake }> 
+          Take photo
+        </button>
+
+      </div>
+
+    </div>
+  );
 }
 
 export default Camera;
-
-/*
-
-  <button onClick={ () => {
-    let facingMode = FACING_MODES.ENVIRONMENT;
-    let idealResolution = { width: 640, height: 480 };
-    this.startCamera(facingMode, idealResolution);
-  }}> Start environment facingMode resolution ideal 640 by 480 </button>
-
-  <button onClick={ () => {
-    let facingMode = FACING_MODES.USER;
-    this.startCamera(facingMode, {});
-  }}> Start user facingMode resolution default </button>
-
-  <button onClick={ () => {
-    let facingMode = FACING_MODES.USER;
-    this.startCameraMaxResolution(facingMode);
-  }}> Start user facingMode resolution maximum </button>
-
-  <button onClick={ () => {
-    this.takePhoto();
-  }}> Take photo </button>
-
-  <button onClick={ () => {
-    this.stopCamera();
-  }}> Stop </button>
-
-*/
-
