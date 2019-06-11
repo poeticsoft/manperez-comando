@@ -1,5 +1,5 @@
 
-import React, { useContext  } from 'react';
+import React, { useState, useContext } from 'react';
 import MessageContext from '../../context/message.context';
 import './message.component.css';
 
@@ -9,7 +9,7 @@ function Message() {
 
   return (
     <div className={ `Message ${ context.message.type }` }>
-      { context.message.message } 
+      { context.message.text } 
     </div>
   );
 }

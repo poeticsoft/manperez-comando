@@ -1,16 +1,12 @@
-
-import React, { useState } from 'react';
-
-const [ message, setMessage ] = useState({
-  message: {
-    type: 'info',
-    message: 'init'
-  }
-});
+// https://medium.com/digio-australia/using-the-react-usecontext-hook-9f55461c4eae
+import React from 'react';
 
 const MessageContext = React.createContext({
-  message,
-  setMessage
+  message: {
+    type: '',
+    text: ''
+  },
+  updateMessage: () => {}
 });
 
 export default MessageContext;

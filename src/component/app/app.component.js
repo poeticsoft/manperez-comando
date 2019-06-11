@@ -7,9 +7,28 @@ import './app.component.scss';
 
 function App() {
 
-  const [ cameraReady, setCameraReady ] = useState(false);
+  const updateMessage = (message) => {
 
+    setMessage(prevState => {
+
+      return {
+        ...prevState,
+        message
+      }
+    })
+  }
+  const messageState = {
+    message: {
+      type: 'info',
+      text: 'Init'
+    },
+    updateMessage
+  }
+  const [message, setMessage] = useState(messageState);
+  const [ cameraReady, setCameraReady ] = useState(false);
+  
   return (
+    <MessageContext.Provider value={ message } >
       <div className={
         `App ${ cameraReady ? 'CameraReady' : ''}`
       }>
@@ -19,6 +38,7 @@ function App() {
         <div className="Splash"></div>
         <Message />
       </div>
+    </MessageContext.Provider>
   );
 }
 
