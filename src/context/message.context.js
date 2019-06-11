@@ -2,10 +2,7 @@
 import React from 'react';
 
 const MessageContext = React.createContext({
-  message: {
-    type: '',
-    text: ''
-  },
+  messages: [],
   updateMessage: () => {}
 });
 

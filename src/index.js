@@ -6,6 +6,18 @@ import App from './component/app/app.component';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
+if('serviceWorker' in navigator) {
+  
+  navigator.serviceWorker
+  .getRegistrations()
+  .then((registrations) => {
+
+    for(let registration of registrations) {  
+      registration.unregister()
+    }
+  });
+}
+
 /*
 
 if('serviceWorker' in navigator) {

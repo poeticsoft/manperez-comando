@@ -11,17 +11,17 @@ function App() {
 
     setMessage(prevState => {
 
-      return {
+      const messages = prevState.messages.concat(message)
+      const newState = {
         ...prevState,
-        message
+        messages
       }
+
+      return newState
     })
   }
   const messageState = {
-    message: {
-      type: 'info',
-      text: 'Init'
-    },
+    messages: [],
     updateMessage
   }
   const [message, setMessage] = useState(messageState);

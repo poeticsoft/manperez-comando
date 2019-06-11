@@ -2,8 +2,8 @@
 import React, { 
   useContext, 
   useState, 
-  useEffect, 
-  useLayoutEffect 
+  useEffect,
+  useCallback
 } from 'react'
 import CameraPhoto, { FACING_MODES } from 'jslib-html5-camera-photo'
 import MessageContext from '../../context/message.context'
@@ -12,14 +12,15 @@ import SwipeableViews from 'react-swipeable-views'
 import Image from './image/image.component'
 import './camera.component.scss'
 
-function Camera(props) {
+function Camera({ setcameraready }) {
 
   const videoRef = React.createRef();
   const [cameraPhoto, setCameraPhoto] = useState(null);
   const [inRafaga, setInRafaga] = useState(false) 
   const [photos, setFotos] = useState([]) 
+  const [cameraStarted, setCameraStarted] = useState(false)
+  const [useCamera, setUseCamera] = useState(FACING_MODES.USER)
   const context = useContext(MessageContext)
-  let useCamera = FACING_MODES.ENVIRONMENT
 
   function toggleInRafaga() {
 
@@ -58,7 +59,7 @@ function Camera(props) {
     .stopCamera()
     .then(() => {      
       
-      props.setcameraready(false) 
+      setcameraready(false) 
 
       context.updateMessage({
         type: 'warn',
@@ -78,46 +79,76 @@ function Camera(props) {
 
     stopCamera()
 
-    useCamera = useCamera == FACING_MODES.ENVIRONMENT ? 
-                              FACING_MODES.USER:
-                              FACING_MODES.ENVIRONMENT
+    if(useCamera === FACING_MODES.ENVIRONMENT) {
+
+      setUseCamera(FACING_MODES.USER)
+
+    } else {   
+
+      setUseCamera(FACING_MODES.ENVIRONMENT)
+    }
+
+    context.updateMessage({
+      type: 'info',
+      text: `Changed to camera ${ useCamera }`
+    })
+
     startCamera();
   } 
+  
+  const startCamera = useCallback(() => { 
 
-  function startCamera() {
+    return cameraPhoto.startCameraMaxResolution(useCamera)
 
-    cameraPhoto
-    .startCameraMaxResolution(useCamera)
-    .then(() => { 
-      
-      props.setcameraready(true) 
+  }, [
+    cameraPhoto,
+    useCamera
+  ])
+
+  useEffect (() => {
+
+    if(!cameraPhoto) {
 
       context.updateMessage({
         type: 'info',
-        text: 'Camera ready'
-      })
-    })
-    .catch((error) => {  
-
-      context.updateMessage({
-        message: {
-          type: 'error',
-          text: 'Camera not accesible! ' + error
-        }
-      })
-    })
-  }
-
-  useEffect (() => { 
-
-    if(!cameraPhoto) {      
+        text: 'Starting camera'
+      }) 
 
       return setCameraPhoto(new CameraPhoto(videoRef.current));
     }
 
-    startCamera();
+    if(!cameraStarted) {
+      
+      startCamera()      
+      .then(() => {  
 
-  }, [cameraPhoto])
+        context.updateMessage({
+          type: 'info',
+          text: 'Camera ready'
+        })   
+
+        setcameraready(true);
+      })
+      .catch((error) => {   
+
+        context.updateMessage({
+          type: 'error',
+          text: 'Camera not accesible! ' + error
+        })
+      }) 
+
+      setCameraStarted(true) 
+    }
+
+  }, [
+    cameraPhoto,
+    context, 
+    videoRef,
+    startCamera,
+    setCameraStarted,
+    cameraStarted,
+    setcameraready
+  ])
 
   return (
     <div className="Camera">
