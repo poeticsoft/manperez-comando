@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "jslib-html5-camera-photo": "^3.0.2-beta.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
